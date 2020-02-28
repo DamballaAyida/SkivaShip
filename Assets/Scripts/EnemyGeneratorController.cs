@@ -8,6 +8,9 @@ public class EnemyGeneratorController : MonoBehaviour
     [Range(0f,20f)]
     public float generatorTimer;
     Vector3 tempPos;
+    public float tiempo=0;
+    public float aux=10;
+
     
 
     // Start is called before the first frame update
@@ -20,7 +23,13 @@ public class EnemyGeneratorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        tempPos.y = Random.Range(-3.9f, 3.9f);
+        tiempo += Time.deltaTime;
+        if (tiempo > aux)
+        {
+            generatorTimer -= 0.1f;
+            aux = aux + 10;
+        }
+        tempPos.y = Random.Range(-4f, 4f);
         
     }
     void CreateEnemy()
@@ -36,5 +45,9 @@ public class EnemyGeneratorController : MonoBehaviour
     public void CancelGenerator()
     {
         CancelInvoke("CreateEnemy");
+    }
+    public void ResetTimmer()
+    {
+        generatorTimer = 0.5f;
     }
 }

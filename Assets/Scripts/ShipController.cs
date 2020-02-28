@@ -11,29 +11,37 @@ public class ShipController : MonoBehaviour
     public GameObject gameController;
     public bool vivo;
     public GameObject enemyGenerator;
-    
-    // Start is called before the first frame update
-    void Start()
+    public int valgema;
+    GameController GC;
+    public GameObject gema1;
+    public GameObject gema2;
+    public GameObject gema3;
+    public GameObject gema4;
+    public GameObject gema5;
+    public Joystick joystick;
+
+    private void Awake()
     {
         vivo = true;
-
         animator = GetComponent<Animator>();
-        rigidbody2D = GetComponent<Rigidbody2D>(); 
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        GC = GameController.instance;
+
+    }
+    void Start()
+    {
+
     }
 
-    // Update is called once per frame
     private void FixedUpdate()
     {
         if (vivo) { 
-            float moveh = Input.GetAxis("Horizontal");
-            rigidbody2D.velocity = new Vector2(moveh * maxSpeed, rigidbody2D.velocity.y);
-            float movev = Input.GetAxis("Vertical");
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, movev * maxSpeed);
+            rigidbody2D.velocity = new Vector2(joystick.Horizontal * maxSpeed, rigidbody2D.velocity.y);
+            gameController.SendMessage("IncrementaScore",0.15);
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, joystick.Vertical * maxSpeed);
+            gameController.SendMessage("IncrementaScore", 0.25);
         }
-        else
-        {
-            rigidbody2D.gravityScale = 0.4f;
-        }
+        
     }
     public void UpdateState(string state = null)
     {
@@ -47,21 +55,75 @@ public class ShipController : MonoBehaviour
         if (collision.tag == "Enemy")
         {
             vivo = false;
+            Kill();
             enemyGenerator.SendMessage("CancelGenerator");
             UpdateState("Explosion");
             gameController.GetComponent<GameController>().gameState = GameController.GameState.Ended;
+            //GC.gameState = GameController.GameState.Hundido;
         }
         if (collision.tag == "Hundido")
         {
             vivo = false;
             enemyGenerator.SendMessage("CancelGenerator");
-            //gameController.GetComponent<GameController>().gameState = GameController.GameState.Ended;
+            gameController.GetComponent<GameController>().gameState = GameController.GameState.Ended;
             gameController.GetComponent<GameController>().gameState = GameController.GameState.Hundido;
+            //GC.gameState = GameController.GameState.Ended;
+            //GC.gameState = GameController.GameState.Hundido;
         }
+        if (collision.tag == "Gema1")
+        {
+            valgema++;
+            gameController.SendMessage("CancelGem",1); //esto es un intento
+            gameController.GetComponent<GameController>().gema1.SetActive(false);
+            gameController.SendMessage("ActualizaGema", valgema.ToString());
+            gameController.SendMessage("IncrementaScore", 1000);
+        }
+        if (collision.tag == "Gema2")
+        {
+            valgema++;
+            gameController.SendMessage("CancelGem", 2);
+            gameController.GetComponent<GameController>().gema2.SetActive(false);
+            gameController.SendMessage("ActualizaGema", valgema.ToString());
+            gameController.SendMessage("IncrementaScore", 2000);
+        }
+        if (collision.tag == "Gema3")
+        {
+            valgema++;
+            gameController.SendMessage("CancelGem", 3);
+            gameController.GetComponent<GameController>().gema3.SetActive(false);
+            gameController.SendMessage("ActualizaGema", valgema.ToString());
+            gameController.SendMessage("IncrementaScore", 2000);
+        }
+        if (collision.tag == "Gema4")
+        {
+            valgema++;
+            gameController.SendMessage("CancelGem", 4);
+            gameController.GetComponent<GameController>().gema4.SetActive(false);
+            gameController.SendMessage("ActualizaGema", valgema.ToString());
+            gameController.SendMessage("IncrementaScore", 3000);
+        }
+        if (collision.tag == "Gema5")
+        {
+            valgema++;
+            gameController.SendMessage("CancelGem", 5);
+            gameController.GetComponent<GameController>().gema5.SetActive(false);
+            gameController.SendMessage("ActualizaGema", valgema.ToString());
+            gameController.SendMessage("IncrementaScore", 3000);
+        }
+        
+
 
     }
     public void Revive()
     {
         vivo = true;
+    }
+    private void Kill()
+    {
+        rigidbody2D.gravityScale = 0.4f;
+    }
+    public int DimeGemas()
+    {
+        return valgema;
     }
 }

@@ -7,6 +7,14 @@ TagManager:
   - Destructor
   - Enemy
   - Hundido
+  - Gema
+  - Nave
+  - Gema1
+  - Gema2
+  - Gema3
+  - Gema4
+  - Gema5
+  - Xe
   layers:
   - Default
   - TransparentFX
